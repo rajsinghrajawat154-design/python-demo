@@ -15,3 +15,29 @@ def selection_sort(arr):
 numbers = [64, 25, 12, 22, 11]
 sorted_numbers = selection_sort(numbers)
 print(sorted_numbers)  # Output: [11, 12, 22, 25, 64]
+
+
+
+
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        if (numRows == 1 || numRows >= (int)s.size()) return s;
+
+        vector<string> rows(numRows);
+        int row = 0;
+        int dir = 1;  // +1 moving down, -1 moving up
+
+        for (char c : s) {
+            rows[row] += c;
+            // bounce at the top and bottom rows
+            if (row == 0) dir = 1;
+            else if (row == numRows - 1) dir = -1;
+            row += dir;
+        }
+
+        string result;
+        for (const string& r : rows) result += r;
+        return result;
+    }
+};
