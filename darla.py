@@ -94,3 +94,21 @@ public:
         return n;   // only reached when n == 0
     }
 };
+
+class Solution {
+public:
+    int lengthOfLastWord(string s) {
+        int len = 0;
+
+        for (int i = s.size() - 1; i >= 0; i--) {
+            if (s[i] != ' ') {
+                len++;                  // inside the last word
+            } else if (len > 0) {
+                break;                  // hit the space before the last word
+            }                           // else: still skipping trailing spaces
+        }
+        return len;
+    }
+};
+
+
