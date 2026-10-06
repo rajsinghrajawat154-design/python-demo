@@ -77,3 +77,20 @@ public:
         return sign * result;
     }
 };
+
+
+class Solution {
+public:
+    int searchInsert(vector<int>& nums, int target) {
+        int n = nums.size();
+
+        for (int lo = 0, hi = n; lo < hi; ) {
+            int mid = lo + (hi - lo) / 2;
+            if (nums[mid] < target) lo = mid + 1;
+            else hi = mid;
+
+            if (lo >= hi) return lo;
+        }
+        return n;   // only reached when n == 0
+    }
+};
