@@ -167,3 +167,21 @@ public:
         return negative ? -quotient : quotient;
     }
 };
+
+#include <bits/stdc++.h>
+using namespace std;
+ 
+void mergeSort(vector<int>& a, int l, int r) {
+    if (l >= r) return;
+    int m = (l + r) / 2;
+    mergeSort(a, l, m);
+    mergeSort(a, m + 1, r);
+    inplace_merge(a.begin() + l, a.begin() + m + 1, a.begin() + r + 1);
+}
+ 
+int main() {
+    vector<int> a = {38, 27, 43, 3, 9, 82, 10};
+    mergeSort(a, 0, a.size() - 1);
+    for (int x : a) cout << x << " ";
+}
+ 
