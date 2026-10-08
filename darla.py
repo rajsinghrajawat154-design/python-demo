@@ -192,117 +192,19 @@ int main() {
 
 
 
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        if (nums.empty()) return 0;
 
-
-
-
-""
-Travelling Salesman Problem (TSP)
- 
-Two exact solutions:
-  1. Brute force   - tries every permutation, O(n!)
-  2. Held-Karp DP  - bitmask dynamic programming, O(n^2 * 2^n)
- 
-Both return the minimum tour cost and the tour itself (starting and ending at city 0).
-"""
- 
-from itertools import permutations
- 
-INF = float("inf")
- 
- 
-def tsp_brute_force(dist):
-    n = len(dist)
-    best_cost = INF
-    best_tour = None
- 
-    # Fix city 0 as the start, permute the rest
-    for perm in permutations(range(1, n)):
-        cost = dist[0][perm[0]]
-        for i in range(len(perm) - 1):
-            cost += dist[perm[i]][perm[i + 1]]
-        cost += dist[perm[-1]][0]
- 
-        if cost < best_cost:
-            best_cost = cost
-            best_tour = [0] + list(perm) + [0]
- 
-    return best_cost, best_tour
- 
- 
-def tsp_held_karp(dist):
-    n = len(dist)
-    FULL = 1 << n
- 
-    # dp[mask][i] = min cost to start at 0, visit exactly the cities in mask, end at i
-    dp = [[INF] * n for _ in range(FULL)]
-    parent = [[-1] * n for _ in range(FULL)]
-    dp[1][0] = 0  # only city 0 visited, standing at city 0
- 
-    for mask in range(FULL):
-        if not (mask & 1):  # every valid mask must contain city 0
-            continue
-        for last in range(n):
-            if not (mask & (1 << last)) or dp[mask][last] == INF:
-                continue
-            for nxt in range(n):
-                if mask & (1 << nxt):
-                    continue
-                new_mask = mask | (1 << nxt)
-                new_cost = dp[mask][last] + dist[last][nxt]
-                if new_cost < dp[new_mask][nxt]:
-                    dp[new_mask][nxt] = new_cost
-                    parent[new_mask][nxt] = last
- 
-    # Close the tour by returning to city 0
-    best_cost = INF
-    last_city = -1
-    for i in range(1, n):
-        cost = dp[FULL - 1][i] + dist[i][0]
-        if cost < best_cost:
-            best_cost = cost
-            last_city = i
- 
-    # Rebuild the path by walking the parent pointers backwards
-    tour = [0]
-    mask = FULL - 1
-    cur = last_city
-    path = []
-    while cur != -1:
-        path.append(cur)
-        prev = parent[mask][cur]
-        mask ^= 1 << cur
-        cur = prev
-    tour = [0] + path[::-1][1:] + [0] if path[-1] == 0 else [0] + path[::-1] + [0]
- 
-    return best_cost, tour
- 
- 
-def main():
-    # Example: 4 cities, symmetric distance matrix
-    dist = [
-        [0, 10, 15, 20],
-        [10, 0, 35, 25],
-        [15, 35, 0, 30],
-        [20, 25, 30, 0],
-    ]
- 
-    print("Distance matrix:")
-    for row in dist:
-        print(row)
- 
-    cost, tour = tsp_brute_force(dist)
-    print("\nBrute force:")
-    print("  Minimum cost:", cost)
-    print("  Tour:", " -> ".join(map(str, tour)))
- 
-    cost, tour = tsp_held_karp(dist)
-    print("\nHeld-Karp DP:")
-    print("  Minimum cost:", cost)
-    print("  Tour:", " -> ".join(map(str, tour)))
- 
- 
-if __name__ == "__main__":
-    main()
- 
+        int k = 1;                           // nums[0..k-1] holds the unique values
+        for (int i = 1; i < nums.size(); i++) {
+            if (nums[i] != nums[k - 1]) {    // found a new value
+                nums[k] = nums[i];
+                k++;
+            }
+        }
+        return k;
+    }
+};
  
