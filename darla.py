@@ -242,3 +242,36 @@ public:
         return -1;
     }
 }; 
+
+
+
+
+##Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+##solution
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string> res;
+        string cur;
+        build(res, cur, 0, 0, n);
+        return res;
+    }
+
+private:
+    void build(vector<string>& res, string& cur, int open, int close, int n) {
+        if (cur.size() == 2 * n) {          // used all n pairs
+            res.push_back(cur);
+            return;
+        }
+        if (open < n) {                     // can still add '('
+            cur.push_back('(');
+            build(res, cur, open + 1, close, n);
+            cur.pop_back();                 // backtrack
+        }
+        if (close < open) {                 // can add ')' only if it closes something
+            cur.push_back(')');
+            build(res, cur, open, close + 1, n);
+            cur.pop_back();                 // backtrack
+        }
+    }
+};
