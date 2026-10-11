@@ -306,3 +306,22 @@ public:
         return dummy.next;
     }
 };
+
+
+
+
+
+
+
+class Solution {
+public:
+    int climbStairs(int n) {
+        int a = 1, b = 1;              // ways to reach step 0 and step 1
+        for (int i = 2; i <= n; i++) {
+            int c = a + b;             // ways(i) = ways(i-1) + ways(i-2)
+            a = b;
+            b = c;
+        }
+        return b;
+    }
+};
