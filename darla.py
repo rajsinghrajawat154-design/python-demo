@@ -325,3 +325,23 @@ public:
         return b;
     }
 };
+
+
+
+
+class Solution {
+public:
+    int mySqrt(int x) {
+        int lo = 0, hi = x, ans = 0;
+        while (lo <= hi) {
+            int mid = lo + (hi - lo) / 2;
+            if ((long long)mid * mid <= x) {   // mid could be the answer
+                ans = mid;
+                lo = mid + 1;                  // try a bigger one
+            } else {
+                hi = mid - 1;                  // too big
+            }
+        }
+        return ans;
+    }
+};
