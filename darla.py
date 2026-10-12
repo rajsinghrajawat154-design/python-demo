@@ -345,3 +345,34 @@ public:
         return ans;
     }
 };
+
+
+
+
+class Solution {
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string>> res;
+        vector<string> board(n, string(n, '.'));
+        vector<bool> col(n), d1(2 * n), d2(2 * n);
+        solve(0, n, board, col, d1, d2, res);
+        return res;
+    }
+
+private:
+    void solve(int r, int n, vector<string>& board, vector<bool>& col,
+               vector<bool>& d1, vector<bool>& d2, vector<vector<string>>& res) {
+        if (r == n) { res.push_back(board); return; }   // all rows filled
+        for (int c = 0; c < n; c++) {
+            if (col[c] || d1[r + c] || d2[r - c + n]) continue;   // attacked
+
+            board[r][c] = 'Q';                                    // place
+            col[c] = d1[r + c] = d2[r - c + n] = true;
+
+            solve(r + 1, n, board, col, d1, d2, res);             // next row
+
+            board[r][c] = '.';                                    // undo
+            col[c] = d1[r + c] = d2[r - c + n] = false;
+        }
+    }
+};
