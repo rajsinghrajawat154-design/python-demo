@@ -72,3 +72,40 @@ public:
     }
 };
 
+
+
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class Solution {
+public:
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        vector<vector<int>> res;
+        vector<int> cur;
+        vector<bool> used(nums.size(), false);
+        backtrack(nums, used, cur, res);
+        return res;
+    }
+
+private:
+    void backtrack(const vector<int>& nums, vector<bool>& used,
+                   vector<int>& cur, vector<vector<int>>& res) {
+        if (cur.size() == nums.size()) {
+            res.push_back(cur);
+            return;
+        }
+        for (int i = 0; i < (int)nums.size(); ++i) {
+            if (used[i]) continue;
+            // skip duplicates: only use nums[i] if its equal predecessor is already used
+            if (i > 0 && nums[i] == nums[i - 1] && !used[i - 1]) continue;
+            used[i] = true;
+            cur.push_back(nums[i]);
+            backtrack(nums, used, cur, res);
+            cur.pop_back();
+            used[i] = false;
+        }
+    }
+};
+
