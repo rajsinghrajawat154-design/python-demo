@@ -449,3 +449,26 @@ private:
         inorder(node->right, first, second, prev);
     }
 };
+
+
+class Solution:
+    def sortableIntegers(self, nums):
+        n = len(nums)
+        s = sorted(nums)
+        total = 0
+        for k in range(1, n + 1):
+            if n % k:
+                continue
+            ok = True
+            for i in range(0, n, k):
+                b = nums[i:i + k]
+                if sorted(b) != s[i:i + k]:
+                    ok = False
+                    break
+                descents = sum(b[j] > b[(j + 1) % k] for j in range(k))
+                if descents > 1:
+                    ok = False
+                    break
+            if ok:
+                total += k
+        return total
