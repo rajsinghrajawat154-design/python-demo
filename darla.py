@@ -472,3 +472,32 @@ class Solution:
             if ok:
                 total += k
         return total
+
+
+class Solution:
+    def minSwaps(self, nums):
+        n = len(nums)
+
+        def ds(x):
+            s = 0
+            while x:
+                s += x % 10
+                x //= 10
+            return s
+
+        target = sorted(nums, key=lambda x: (ds(x), x))
+        pos = {v: i for i, v in enumerate(target)}
+
+        visited = [False] * n
+        swaps = 0
+        for i in range(n):
+            if visited[i] or pos[nums[i]] == i:
+                continue
+            j = i
+            length = 0
+            while not visited[j]:
+                visited[j] = True
+                j = pos[nums[j]]
+                length += 1
+            swaps += length - 1
+        return swaps
