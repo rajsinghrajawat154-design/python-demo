@@ -155,3 +155,20 @@ public:
 };
 
 
+class Solution:
+    def minOperations(self, s):
+        n = len(s)
+        t = sorted(s)
+        if list(s) == t:
+            return 0
+        if n == 2:
+            return -1
+        if s[0] == t[0] or s[-1] == t[-1]:
+            return 1
+        interior = s[1:-1]
+        if t[0] in interior or t[-1] in interior:
+            return 2
+        return 3
+        
+        
+
