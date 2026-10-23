@@ -216,3 +216,12 @@ class Solution:
                 dp[j] = ((dp[j] and s1[i - 1] == s3[i + j - 1]) or
                          (dp[j - 1] and s2[j - 1] == s3[i + j - 1]))
         return dp[m]
+
+class Solution:
+    def sortPermutation(self, nums):
+        ans = -1  # all bits set
+        for i, v in enumerate(nums):
+            if v != i:
+                ans &= v
+        return 0 if ans == -1 else ans
+        
