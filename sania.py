@@ -238,4 +238,8 @@ class Solution:
         start = max(day_of_year(arriveAlice), day_of_year(arriveBob))
         end = min(day_of_year(leaveAlice), day_of_year(leaveBob))
         return max(0, end - start + 1)
-        
+
+
+class Solution:
+    def grayCode(self, n):
+        return [i ^ (i >> 1) for i in range(1 << n)]
