@@ -224,4 +224,18 @@ class Solution:
             if v != i:
                 ans &= v
         return 0 if ans == -1 else ans
+
+
+
+class Solution:
+    def countDaysTogether(self, arriveAlice, leaveAlice, arriveBob, leaveBob):
+        days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+        def day_of_year(d):
+            m, dd = int(d[:2]), int(d[3:])
+            return sum(days[:m - 1]) + dd
+
+        start = max(day_of_year(arriveAlice), day_of_year(arriveBob))
+        end = min(day_of_year(leaveAlice), day_of_year(leaveBob))
+        return max(0, end - start + 1)
         
