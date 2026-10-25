@@ -537,4 +537,41 @@ class Solution:
         for x in nums:
             res += [cur + [x] for cur in res]
         return res
+
+from collections import Counter
+
+class Solution:
+    def findSubstring(self, s, words):
+        if not s or not words:
+            return []
+        w, m = len(words[0]), len(words)
+        need = Counter(words)
+        res = []
+
+        for offset in range(w):
+            left = offset
+            count = 0
+            seen = {}
+            for right in range(offset, len(s) - w + 1, w):
+                word = s[right:right + w]
+                if word in need:
+                    seen[word] = seen.get(word, 0) + 1
+                    count += 1
+                    while seen[word] > need[word]:
+                        lw = s[left:left + w]
+                        seen[lw] -= 1
+                        count -= 1
+                        left += w
+                    if count == m:
+                        res.append(left)
+                        lw = s[left:left + w]
+                        seen[lw] -= 1
+                        count -= 1
+                        left += w
+                else:
+                    seen.clear()
+                    count = 0
+                    left = right + w
+        return res
+        
         
