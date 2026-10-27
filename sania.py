@@ -254,4 +254,15 @@ class Solution:
             else:
                 grid.append('#' * (n - 1) + '.')
         return grid
+
+
+class Solution:
+    def maxSumOfSquares(self, num, sum):
+        if sum > 9 * num:
+            return ""
+        q, r = divmod(sum, 9)
+        res = '9' * q
+        if r:
+            res += str(r)
+        return res + '0' * (num - len(res))
         
