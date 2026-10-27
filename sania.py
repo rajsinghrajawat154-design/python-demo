@@ -243,3 +243,15 @@ class Solution:
 class Solution:
     def grayCode(self, n):
         return [i ^ (i >> 1) for i in range(1 << n)]
+
+
+class Solution:
+    def createGrid(self, m, n):
+        grid = []
+        for i in range(m):
+            if i == 0:
+                grid.append('.' * n)
+            else:
+                grid.append('#' * (n - 1) + '.')
+        return grid
+        
