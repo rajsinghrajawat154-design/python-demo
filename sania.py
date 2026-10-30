@@ -291,3 +291,35 @@ class Solution:
             prev = cur
 
         return min(prev[n - 1])
+
+import heapq
+
+class Solution:
+    def shortestPath(self, n, edges, labels, k):
+        if k < 1:
+            return -1
+
+        adj = [[] for _ in range(n)]
+        for u, v, w in edges:
+            adj[u].append((v, w))
+
+        INF = float("inf")
+        dist = [[INF] * (k + 1) for _ in range(n)]
+        dist[0][1] = 0
+        heap = [(0, 0, 1)]  # (cost, node, run length)
+
+        while heap:
+            d, u, r = heapq.heappop(heap)
+            if d > dist[u][r]:
+                continue
+            if u == n - 1:
+                return d
+            for v, w in adj[u]:
+                nr = r + 1 if labels[v] == labels[u] else 1
+                if nr > k:
+                    continue
+                nd = d + w
+                if nd < dist[v][nr]:
+                    dist[v][nr] = nd
+                    heapq.heappush(heap, (nd, v, nr))
+        return -1
