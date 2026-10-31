@@ -323,3 +323,26 @@ class Solution:
                     dist[v][nr] = nd
                     heapq.heappush(heap, (nd, v, nr))
         return -1
+
+
+
+class Solution:
+    def uniquePaths(self, grid):
+        MOD = 10**9 + 7
+        m, n = len(grid), len(grid[0])
+        A = [[0] * (n + 1) for _ in range(m + 1)]  # ways trying to enter (i,j) moving right
+        B = [[0] * (n + 1) for _ in range(m + 1)]  # ways trying to enter (i,j) moving down
+
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == 0:
+                    S = (A[i][j] + B[i][j] + (1 if i == 0 and j == 0 else 0)) % MOD
+                    if i == m - 1 and j == n - 1:
+                        return S
+                    A[i][j + 1] = (A[i][j + 1] + S) % MOD   # try to move right
+                    B[i + 1][j] = (B[i + 1][j] + S) % MOD   # try to move down
+                else:
+                    # mirror: entering moving right -> pushed down; entering moving down -> pushed right
+                    B[i + 1][j] = (B[i + 1][j] + A[i][j]) % MOD
+                    A[i][j + 1] = (A[i][j + 1] + B[i][j]) % MOD
+        return 0
