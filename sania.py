@@ -346,3 +346,10 @@ class Solution:
                     B[i + 1][j] = (B[i + 1][j] + A[i][j]) % MOD
                     A[i][j + 1] = (A[i][j + 1] + B[i][j]) % MOD
         return 0
+
+
+
+
+class Solution:
+    def minMoves(self, nums):
+        return sum(nums) - len(nums) * min(nums)
