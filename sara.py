@@ -170,5 +170,11 @@ class Solution:
             return 2
         return 3
         
-        
+
+
+
+
+class Solution(object):
+    def minMoves(self, nums):
+        return len(nums) * max(nums) - sum(nums)
 
