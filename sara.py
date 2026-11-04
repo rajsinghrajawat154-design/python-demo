@@ -222,3 +222,69 @@ class Solution(object):
             last[x] = j
         return res % (10**9 + 7)
 
+class Solution(object):
+    def minOperations(self, nums, x, k):
+        n = len(nums)
+        vals = sorted(set(nums))
+        rank = {}
+        for i, v in enumerate(vals):
+            rank[v] = i + 1
+        m = len(vals)
+        cnt = [0] * (m + 1)
+        sm = [0] * (m + 1)
+
+        def add(i, c, v):
+            while i <= m:
+                cnt[i] += c
+                sm[i] += v
+                i += i & -i
+
+        def prefix(i):
+            c = 0
+            s = 0
+            while i > 0:
+                c += cnt[i]
+                s += sm[i]
+                i -= i & -i
+            return c, s
+
+        top = 1
+        while top * 2 <= m:
+            top *= 2
+
+        def kth(rem):
+            pos = 0
+            step = top
+            while step:
+                nxt = pos + step
+                if nxt <= m and cnt[nxt] < rem:
+                    pos = nxt
+                    rem -= cnt[nxt]
+                step >>= 1
+            return pos + 1
+
+        cost = [0] * (n - x + 1)
+        total = 0
+        for i in range(n):
+            add(rank[nums[i]], 1, nums[i])
+            total += nums[i]
+            if i >= x:
+                add(rank[nums[i - x]], -1, -nums[i - x])
+                total -= nums[i - x]
+            if i >= x - 1:
+                r = kth(x // 2 + 1)
+                med = vals[r - 1]
+                cl, sl = prefix(r)
+                cost[i - x + 1] = (med * cl - sl) + ((total - sl) - med * (x - cl))
+
+        INF = float('inf')
+        prev = [0] * (n + 1)
+        for j in range(1, k + 1):
+            cur = [INF] * (n + 1)
+            for i in range(x, n + 1):
+                best = cur[i - 1]
+                cand = prev[i - x] + cost[i - x]
+                cur[i] = cand if cand < best else best
+            prev = cur
+        return prev[n]
+
