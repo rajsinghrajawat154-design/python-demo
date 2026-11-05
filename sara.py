@@ -288,3 +288,22 @@ class Solution(object):
             prev = cur
         return prev[n]
 
+
+from bisect import bisect_left
+
+class Solution(object):
+    def findTheDistanceValue(self, arr1, arr2, d):
+        arr2.sort()
+        m = len(arr2)
+        res = 0
+        for a in arr1:
+            i = bisect_left(arr2, a)
+            ok = True
+            if i < m and arr2[i] - a <= d:
+                ok = False
+            if i > 0 and a - arr2[i - 1] <= d:
+                ok = False
+            if ok:
+                res += 1
+        return res
+        
