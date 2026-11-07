@@ -334,3 +334,38 @@ class Solution(object):
                 lo += 1
             res[qi] = n - active
         return res
+
+
+
+import heapq
+
+class Solution(object):
+    def assignTasks(self, servers, tasks):
+        free = [(w, i) for i, w in enumerate(servers)]
+        heapq.heapify(free)
+        busy = []  # (free_time, weight, index)
+        ans = []
+        t = 0
+
+        for j, duration in enumerate(tasks):
+            t = max(t, j)
+
+            # If no server is free, wait for the earliest one to finish
+            if not free:
+                t = max(t, busy[0][0])
+
+            # Release all servers that are free by time t
+            while busy and busy[0][0] <= t:
+                _, w, i = heapq.heappop(busy)
+                heapq.heappush(free, (w, i))
+
+            w, i = heapq.heappop(free)
+            ans.append(i)
+            heapq.heappush(busy, (t + duration, w, i))
+
+        return ans
+
+
+if __name__ == "__main__":
+    print Solution().assignTasks([3, 3, 2], [1, 2, 3, 2, 1, 2])  # [2, 2, 0, 2, 1, 2]
+
