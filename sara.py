@@ -49,6 +49,36 @@ class Solution:
         return dp[n]
 
 
+
+
+
+
+class Solution(object):
+    def countServers(self, grid):
+        m, n = len(grid), len(grid[0])
+        row = [0] * m
+        col = [0] * n
+
+        for i in xrange(m):
+            for j in xrange(n):
+                if grid[i][j] == 1:
+                    row[i] += 1
+                    col[j] += 1
+
+        count = 0
+        for i in xrange(m):
+            for j in xrange(n):
+                if grid[i][j] == 1 and (row[i] > 1 or col[j] > 1):
+                    count += 1
+
+        return count
+
+
+if __name__ == "__main__":
+    s = Solution()
+    print s.countServers([[1, 0], [0, 1]])                                    # 0
+    print s.countServers([[1, 0], [1, 1]])                                    # 3
+    print s.countServers([[1, 1, 0, 0], [0, 0, 1, 0], [0, 0, 1, 0], [0, 0, 0, 1]])  # 4
 #include <string>
 using namespace std;
 
