@@ -399,3 +399,44 @@ class Solution(object):
 if __name__ == "__main__":
     print Solution().assignTasks([3, 3, 2], [1, 2, 3, 2, 1, 2])  # [2, 2, 0, 2, 1, 2]
 
+
+
+
+
+import heapq
+from bisect import bisect_left, insort
+
+class Solution(object):
+    def busiestServers(self, k, arrival, load):
+        """
+        :type k: int
+        :type arrival: List[int]
+        :type load: List[int]
+        :rtype: List[int]
+        """
+        free = range(k)        # in Python 2, range() returns a sorted list
+        busy = []              # min-heap of (finish_time, server_id)
+        count = [0] * k
+
+        for i in xrange(len(arrival)):
+            start = arrival[i]
+
+            # Release servers that have finished by this arrival time
+            while busy and busy[0][0] <= start:
+                _, sid = heapq.heappop(busy)
+                insort(free, sid)
+
+            if not free:
+                continue  # all servers busy: drop request
+
+            # First free server with id >= i % k, wrapping around if needed
+            idx = bisect_left(free, i % k)
+            if idx == len(free):
+                idx = 0
+            sid = free.pop(idx)
+
+            count[sid] += 1
+            heapq.heappush(busy, (start + load[i], sid))
+
+        mx = max(count)
+        return [i for i, c in enumerate(count) if c == mx]
