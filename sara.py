@@ -1,3 +1,73 @@
+
+class Solution(object):
+    def climbStairs(self, n, costs):
+        """
+        :type n: int
+        :type costs: List[int]
+        :rtype: int
+        """
+        INF = float('inf')
+        dp = [INF] * (n + 1)
+        dp[0] = 0
+
+        for j in xrange(1, n + 1):
+            for i in xrange(max(0, j - 3), j):
+                cand = dp[i] + costs[j - 1] + (j - i) ** 2
+                if cand < dp[j]:
+                    dp[j] = cand
+
+        return dp[n]
+
+
+print Solution().climbStairs(4, [1, 2, 3, 4])  # 13
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class Solution:
     def permute(self, nums: List[int]) -> List[List[int]]:
         result = []
