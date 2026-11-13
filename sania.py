@@ -390,3 +390,42 @@ class Solution(object):
             i += 1
             j -= 1
         return res
+
+
+from collections import deque
+
+class Solution(object):
+    def countNonDecreasingSubarrays(self, nums, k):
+        n = len(nums)
+        pre = [0] * (n + 1)
+        for i in xrange(n):
+            pre[i + 1] = pre[i] + nums[i]
+
+        dq = deque()          # record indices, front = leftmost
+        total = 0             # sum of prefix maxima over window [l..r]
+        r = n - 1
+        ans = 0
+
+        for l in xrange(n - 1, -1, -1):
+            # absorb records dominated by nums[l]
+            while dq and nums[dq[0]] <= nums[l]:
+                j = dq.popleft()
+                end = dq[0] if dq else r + 1
+                total -= nums[j] * (end - j)
+            end = dq[0] if dq else r + 1
+            total += nums[l] * (end - l)
+            dq.appendleft(l)
+
+            # shrink right side until cost <= k
+            while total - (pre[r + 1] - pre[l]) > k:
+                total -= nums[dq[-1]]
+                if dq[-1] == r:
+                    dq.pop()
+                r -= 1
+
+            ans += r - l + 1
+        return ans
+
+
+if __name__ == "__main__":
+    print Solution().countNonDecreasingSubarrays([6, 3, 1, 2, 4, 4], 7)   # 17
