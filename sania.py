@@ -429,3 +429,31 @@ class Solution(object):
 
 if __name__ == "__main__":
     print Solution().countNonDecreasingSubarrays([6, 3, 1, 2, 4, 4], 7)   # 17
+
+
+
+
+class Solution(object):
+    def minimumSumSubarray(self, nums, l, r):
+        n = len(nums)
+        pre = [0] * (n + 1)
+        for i in xrange(n):
+            pre[i + 1] = pre[i] + nums[i]
+
+        best = None
+        for i in xrange(n):
+            for length in xrange(l, r + 1):
+                j = i + length
+                if j > n:
+                    break
+                s = pre[j] - pre[i]
+                if s > 0 and (best is None or s < best):
+                    best = s
+
+        return -1 if best is None else best
+
+
+if __name__ == "__main__":
+    print Solution().minimumSumSubarray([3, -2, 1, 4], 2, 3)    # 1
+    print Solution().minimumSumSubarray([-2, 2, -3, 1], 2, 3)   # -1
+    print Solution().minimumSumSubarray([1, 2, 3, 4], 2, 4)     # 3
