@@ -457,3 +457,29 @@ if __name__ == "__main__":
     print Solution().minimumSumSubarray([3, -2, 1, 4], 2, 3)    # 1
     print Solution().minimumSumSubarray([-2, 2, -3, 1], 2, 3)   # -1
     print Solution().minimumSumSubarray([1, 2, 3, 4], 2, 4)     # 3
+
+
+class Solution(object):
+    def numOfSubarrays(self, arr):
+        MOD = 10 ** 9 + 7
+        even, odd = 1, 0      # counts of prefix sums by parity (empty prefix is even)
+        parity = 0
+        ans = 0
+
+        for x in arr:
+            parity = (parity + x) & 1
+            if parity == 0:
+                ans += odd
+                even += 1
+            else:
+                ans += even
+                odd += 1
+            ans %= MOD
+
+        return ans
+
+
+if __name__ == "__main__":
+    print Solution().numOfSubarrays([1, 3, 5])        # 4
+    print Solution().numOfSubarrays([2, 4, 6])        # 0
+    print Solution().numOfSubarrays([1, 2, 3, 4, 5, 6, 7])  # 16
