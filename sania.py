@@ -483,3 +483,25 @@ if __name__ == "__main__":
     print Solution().numOfSubarrays([1, 3, 5])        # 4
     print Solution().numOfSubarrays([2, 4, 6])        # 0
     print Solution().numOfSubarrays([1, 2, 3, 4, 5, 6, 7])  # 16
+
+
+
+
+
+class Solution(object):
+    def digitSum(self, s, k):
+        while len(s) > k:
+            parts = []
+            for i in xrange(0, len(s), k):
+                group = s[i:i + k]
+                total = 0
+                for ch in group:
+                    total += ord(ch) - 48
+                parts.append(str(total))
+            s = "".join(parts)
+        return s
+
+
+if __name__ == "__main__":
+    print Solution().digitSum("11111222223", 3)   # "135"
+    print Solution().digitSum("00000000", 3)      # "000"
