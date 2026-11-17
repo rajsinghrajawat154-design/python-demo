@@ -505,3 +505,56 @@ class Solution(object):
 if __name__ == "__main__":
     print Solution().digitSum("11111222223", 3)   # "135"
     print Solution().digitSum("00000000", 3)      # "000"
+
+
+
+
+
+class Solution(object):
+    def minimumChanges(self, s, k):
+        n = len(s)
+        INF = float('inf')
+
+        # cost[i][j]: min changes to make s[i..j] a semi-palindrome
+        cost = [[INF] * n for _ in xrange(n)]
+        for i in xrange(n):
+            for j in xrange(i + 1, n):
+                L = j - i + 1
+                best = INF
+                for d in xrange(1, L):
+                    if L % d:
+                        continue
+                    m = L // d
+                    c = 0
+                    for t in xrange(d):
+                        a = i + t
+                        b = i + t + (m - 1) * d
+                        while a < b:
+                            if s[a] != s[b]:
+                                c += 1
+                            a += d
+                            b -= d
+                    if c < best:
+                        best = c
+                cost[i][j] = best
+
+        # dp[p][i]: min cost splitting first i chars into p parts
+        dp = [[INF] * (n + 1) for _ in xrange(k + 1)]
+        dp[0][0] = 0
+        for p in xrange(1, k + 1):
+            for i in xrange(2 * p, n + 1):
+                best = INF
+                for j in xrange(2 * (p - 1), i - 1):
+                    if dp[p - 1][j] == INF:
+                        continue
+                    v = dp[p - 1][j] + cost[j][i - 1]
+                    if v < best:
+                        best = v
+                dp[p][i] = best
+        return dp[k][n]
+
+
+if __name__ == "__main__":
+    print Solution().minimumChanges("abcac", 2)     # 1
+    print Solution().minimumChanges("abcdef", 2)    # 2
+    print Solution().minimumChanges("aabbaa", 3)    # 0
