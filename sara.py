@@ -23,6 +23,20 @@ print Solution().climbStairs(4, [1, 2, 3, 4])  # 13
 
 
 
+class Solution(object):
+    def maxSelectedElements(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        dp = {}
+        for x in sorted(nums):
+            dp[x + 1] = dp.get(x, 0) + 1   # raise x to x+1, extend run ending at x
+            dp[x] = dp.get(x - 1, 0) + 1   # keep x, extend run ending at x-1
+        return max(dp.itervalues())
+
+
+
 
 
 
