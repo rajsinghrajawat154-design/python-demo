@@ -1,3 +1,83 @@
+class Solution(object):
+    def findSubtreeSizes(self, parent, s):
+        """
+        :type parent: List[int]
+        :type s: str
+        :rtype: List[int]
+        """
+        n = len(parent)
+        children = [[] for _ in range(n)]
+        for i in range(1, n):
+            children[parent[i]].append(i)
+
+        new_parent = list(parent)
+        last = [-1] * 26
+        order = []                      # preorder
+        # stack entries: (node, state); state 0 = enter, 1 = exit
+        # on exit we restore last[c]; saved[node] holds the old value
+        saved = [-1] * n
+        stack = [(0, 0)]
+        while stack:
+            node, state = stack.pop()
+            c = ord(s[node]) - 97
+            if state == 0:
+                order.append(node)
+                if node != 0 and last[c] != -1:
+                    new_parent[node] = last[c]
+                saved[node] = last[c]
+                last[c] = node
+                stack.append((node, 1))
+                for ch in children[node]:
+                    stack.append((ch, 0))
+            else:
+                last[c] = saved[node]
+
+        size = [1] * n
+        for node in reversed(order):
+            if node != 0:
+                size[new_parent[node]] += size[node]
+        return size
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class Solution(object):
     def climbStairs(self, n, costs):
