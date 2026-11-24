@@ -17,6 +17,47 @@ class Solution(object):
 
 
 
+try:
+    from math import gcd          # Python 3
+except ImportError:
+    from fractions import gcd     # Python 2
+
+
+class Solution(object):
+    def maxLength(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        n = len(nums)
+        best = 0
+        for i in range(n):
+            prod, g, l = 1, 0, 1
+            for j in range(i, n):
+                x = nums[j]
+                prod *= x
+                g = gcd(g, x)
+                l = l * x // gcd(l, x)
+                if prod == l * g:
+                    best = max(best, j - i + 1)
+        return best
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 class Solution(object):
