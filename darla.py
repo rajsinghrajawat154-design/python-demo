@@ -15,7 +15,73 @@ class Solution(object):
 
         return min(total(0), total(min(need1, need2)), total(max(need1, need2)))
 
+class Solution(object):
+    def smallestUniqueSubarray(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        n = len(nums)
+        size = 2 * n + 2
+        nxt = [None] * size          # transitions (dict per state)
+        link = [-1] * size           # suffix links
+        length = [0] * size          # longest subarray in each state
+        cnt = [0] * size             # occurrence count
+        nxt[0] = {}
+        sz = 1
+        last = 0
 
+        for x in nums:
+            cur = sz
+            sz += 1
+            length[cur] = length[last] + 1
+            cnt[cur] = 1
+            nxt[cur] = {}
+            p = last
+            while p != -1 and x not in nxt[p]:
+                nxt[p][x] = cur
+                p = link[p]
+            if p == -1:
+                link[cur] = 0
+            else:
+                q = nxt[p][x]
+                if length[p] + 1 == length[q]:
+                    link[cur] = q
+                else:
+                    clone = sz
+                    sz += 1
+                    length[clone] = length[p] + 1
+                    nxt[clone] = dict(nxt[q])
+                    link[clone] = link[q]
+                    cnt[clone] = 0
+                    while p != -1 and nxt[p].get(x) == q:
+                        nxt[p][x] = clone
+                        p = link[p]
+                    link[q] = clone
+                    link[cur] = clone
+            last = cur
+
+        # counting sort of states by length, then push counts up the links
+        bucket = [0] * (n + 2)
+        for v in xrange(sz):
+            bucket[length[v]] += 1
+        for i in xrange(1, n + 2):
+            bucket[i] += bucket[i - 1]
+        order = [0] * sz
+        for v in xrange(sz - 1, -1, -1):
+            bucket[length[v]] -= 1
+            order[bucket[length[v]]] = v
+        for i in xrange(sz - 1, 0, -1):
+            v = order[i]
+            cnt[link[v]] += cnt[v]
+
+        best = n
+        for v in xrange(1, sz):
+            if cnt[v] == 1:
+                t = length[link[v]] + 1
+                if t < best:
+                    best = t
+        return best
 
 try:
     from math import gcd          # Python 3
