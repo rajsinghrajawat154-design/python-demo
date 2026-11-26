@@ -1,4 +1,41 @@
 class Solution(object):
+    def canAliceWin(self, n):
+        """
+        :type n: int
+        :rtype: bool
+        """
+        k = 10
+        moves = 0
+        while k > 0 and n >= k:
+            n -= k
+            k -= 1
+            moves += 1
+        return moves % 2 == 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Solution(object):
     def minimumCost(self, cost1, cost2, costBoth, need1, need2):
         """
         :type cost1: int
