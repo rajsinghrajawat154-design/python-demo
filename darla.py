@@ -14,7 +14,35 @@ class Solution(object):
 
 
 
+class Solution(object):
+    def maximumSaleItems(self, items, budget):
+        n = len(items)
 
+        # c[i] = free copies gained by buying item i at least once
+        c = [0] * n
+        for i in xrange(n):
+            fi = items[i][0]
+            for j in xrange(n):
+                if i != j and items[j][0] % fi == 0:
+                    c[i] += 1
+
+        dp = [0] * (budget + 1)
+
+        # 0/1 knapsack: first copy of item i is worth 1 + c[i]
+        for i in xrange(n):
+            p = items[i][1]
+            v = 1 + c[i]
+            for b in xrange(budget, p - 1, -1):
+                if dp[b - p] + v > dp[b]:
+                    dp[b] = dp[b - p] + v
+
+        # unbounded filler: extra copies of the cheapest item, worth 1 each
+        pmin = min(item[1] for item in items)
+        for b in xrange(pmin, budget + 1):
+            if dp[b - pmin] + 1 > dp[b]:
+                dp[b] = dp[b - pmin] + 1
+
+        return dp[budget]
 
 
 
